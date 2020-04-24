@@ -1,0 +1,13 @@
+---
+- name: Execute Playbook
+  hosts: all
+  become_user: root
+  gather_facts: no
+  become: yes
+
+  roles:
+  - { role: java }
+  - { role: elasticsearch }
+  - { role: kibana }
+  - { role: logstash }
+  - { role: filebeat }  

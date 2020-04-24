@@ -1,0 +1,36 @@
+---
+
+# Installing Logstash
+#
+#
+- name: Download Logstash
+  get_url:
+     url: "https://artifacts.elastic.co/downloads/logstash/logstash-7.5.0.deb"
+     dest: ./
+
+# Installing Logstash
+#
+- name: Install Logstash
+  command: sudo dpkg -i /home/ubuntu/logstash-7.5.0.deb
+
+ 
+# Start the service
+- name: Starting Logstash
+  service:
+    name: logstash
+    state: started
+
+- name: Copy a sample apache.log
+  copy:
+    src: ./apache.log
+    dest: ./apache.log
+
+- name: Copy logstash config file for apache
+  copy:
+    src: ./apachelog.conf
+    dest: /etc/logstash/conf.d/apachelog.conf
+
+- name: Restart logstash
+  service:
+     name: logstash
+     state: restarted

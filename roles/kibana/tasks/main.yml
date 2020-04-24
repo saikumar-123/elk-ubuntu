@@ -1,0 +1,52 @@
+---
+#
+# Installing Kibana
+#
+
+# Install Kibana 
+
+- name: Download Kibana
+  get_url:
+    url: "https://artifacts.elastic.co/downloads/kibana/kibana-7.5.0-amd64.deb"
+    dest: ./
+
+- name: Installing Kibana
+  command: sudo dpkg -i /home/ubuntu/kibana-7.5.0-amd64.deb
+ 
+# Configurations
+
+- name: Updating the config file to allow outside access
+  lineinfile:
+   destfile: /etc/kibana/kibana.yml
+   regexp: 'server.host:'
+   line: 'server.host: localhost'
+
+- name: Defining server port
+  lineinfile:
+   destfile: /etc/kibana/kibana.yml
+   regexp: 'server.port:'
+   line: 'server.port: 5601'
+   
+# Starting Kibana
+
+- name: Starting Kibana
+  service:
+   name: kibana
+   state: started
+
+
+- name: Configuring nginx
+  copy:
+    src: ./default
+    dest: /etc/nginx/sites-available/default
+
+- name: Defining nginx server
+  lineinfile:
+   destfile: /etc/nginx/sites-available/default
+   regexp: 'server_name localhost;'
+   line: '      server_name {{server_ip}};'
+
+- name: Restart Nginx
+  service:
+   name: nginx
+   state: restarted 

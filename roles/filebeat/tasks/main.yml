@@ -1,0 +1,28 @@
+---
+#
+# Installing Filebeat
+#
+
+# Install Filebeat 
+
+- name: Install Filebeat with apt
+  get_url:
+   url: "https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.5.0-amd64.deb"
+   dest: ./
+
+- name: Isntalling Filebeat
+  command: sudo dpkg -i /home/ubuntu/filebeat-7.5.0-amd64.deb
+
+# Starting Filebeat
+
+- name: Starting Filebeat
+  service:
+   name: filebeat
+   state: started
+
+- name: Installing nginx modules
+  command: sudo filebeat modules enable nginx
+
+- name: Installing system modules
+  command: sudo filebeat modules enable system
+

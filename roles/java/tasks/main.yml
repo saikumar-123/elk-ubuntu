@@ -1,0 +1,44 @@
+---
+
+- local_action: wait_for port=22 search_regex=OpenSSH delay=60
+
+- name: Update packages
+  apt:
+    update_cache: yes
+
+- name: Install a list of packages
+  apt:
+    pkg:
+    - python3.7
+    - apt-transport-https
+    - apache2-utils
+
+- name: upadte packges
+  command: sudo apt-get -f install
+
+- name: Install Java8
+  apt:
+    name: openjdk-8-jdk
+    state: latest 
+    update_cache: yes
+
+- name: Install nginx
+  apt: 
+    name: nginx
+    state: latest
+
+
+- name: Install passlib
+  command: sudo apt-get update -y
+
+- name: Install passlib
+  command: sudo apt-get install -y python3-passlib
+
+- name: Adding secured kibana user
+  htpasswd:
+     path: /etc/nginx/htpasswd.users
+     name: kibadmin
+     password: flblue
+      
+
+
