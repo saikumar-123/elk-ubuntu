@@ -18,10 +18,10 @@ Overview :
 
 Execution:
 
-I hope you had "Terraform" and "Ansible" installed on your local or the server you trying to run this.
+I hope you have "Terraform" and "Ansible" installed on your local or the server you are trying to run this.
 
 
-Terraform init
+terraform init
 
 terraform plan
 
