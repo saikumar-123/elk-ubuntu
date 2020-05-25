@@ -11,6 +11,12 @@
     state: latest 
     update_cache: yes
 
+- name: Create a directory if it does not exist
+  file:
+    path: /opt/kafka
+    state: directory
+    mode: '0755'
+
 - name: Isntalling Kafka
   unarchive:
    src: "https://apache.mivzakim.net/kafka/2.2.0/kafka_2.12-2.2.0.tgz"
