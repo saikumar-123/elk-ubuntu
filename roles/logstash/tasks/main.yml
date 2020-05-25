@@ -20,15 +20,20 @@
     name: logstash
     state: started
 
-- name: Copy a sample apache.log
-  copy:
-    src: ./apache.log
-    dest: ./apache.log
+- name: Copy filebeat config file for nginx
+  template:
+    src: filebeat.yml
+    dest: /etc/filebeat/filebeat.yml
+
+# - name: Copy a sample apache.log
+#   copy:
+#     src: ./apache.log
+#     dest: ./apache.log
 
 - name: Copy logstash config file for apache
   copy:
-    src: ./apachelog.conf
-    dest: /etc/logstash/conf.d/apachelog.conf
+    src: nginx.conf
+    dest: /etc/logstash/conf.d/nginx.conf
 
 - name: Restart logstash
   service:

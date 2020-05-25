@@ -13,6 +13,11 @@
 - name: Isntalling Filebeat
   command: sudo dpkg -i /home/ubuntu/filebeat-7.5.0-amd64.deb
 
+- name: Copy filebeat config file for nginx
+  template:
+    src: filebeat.yml
+    dest: /etc/filebeat/filebeat.yml
+
 # Starting Filebeat
 
 - name: Starting Filebeat
@@ -20,9 +25,9 @@
    name: filebeat
    state: started
 
-- name: Installing nginx modules
-  command: sudo filebeat modules enable nginx
+# - name: Installing nginx modules
+#   command: sudo filebeat modules enable nginx
 
-- name: Installing system modules
-  command: sudo filebeat modules enable system
+# - name: Installing system modules
+#   command: sudo filebeat modules enable system
 

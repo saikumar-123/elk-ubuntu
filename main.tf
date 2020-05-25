@@ -22,7 +22,7 @@ resource "aws_instance" "ansible-elk" {
 	ami = "ami-07ebfd5b3428b6f4d"
 	instance_type = "t2.medium"
         key_name = "maagcpoc"
-	subnet_id = "subnet-0de41be28e67725f4"
+	subnet_id = "subnet-0de41bxxxxxxxxxxx"
 	iam_instance_profile = "ec2_role_for_maagc"
 	root_block_device {
             volume_type= "standard"

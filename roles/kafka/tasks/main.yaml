@@ -1,0 +1,26 @@
+---
+#
+# Installing Filebeat
+#
+
+# Install Filebeat 
+
+- name: Install Zookeeper with apt
+  apt:
+    name: zookeeperd
+    state: latest 
+    update_cache: yes
+
+- name: Isntalling Kafka
+  unarchive:
+   src: "https://apache.mivzakim.net/kafka/2.2.0/kafka_2.12-2.2.0.tgz"
+   dest: /opt/kafka
+   remote_src: yes
+
+# Starting Kafka
+
+- name: Run kafka
+  command: sudo /opt/kafka/bin/kafka-server-start.sh/opt/kafka/config/server.properties
+
+- name: create a topic for our Nginx logs
+  command: bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic nginx
