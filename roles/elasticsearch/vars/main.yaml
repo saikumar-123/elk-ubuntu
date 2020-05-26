@@ -1,0 +1,4 @@
+ES_VERSION: 7.5.0
+DOWNLOAD_URL: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ ES_VERSION }}-amd64.deb
+INSTALLATION_DIR: /usr/local
+ES_HOME: /etc/elasticsearch

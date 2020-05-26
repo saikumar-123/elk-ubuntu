@@ -1,32 +1,105 @@
 ---
-#
-# Installing Filebeat
-#
+#########Install Zookeper####
 
-# Install Filebeat 
+# - name: Install Zookeeper with apt
+#   apt:
+#     name: zookeeperd
+#     state: latest 
+#     update_cache: yes
 
-- name: Install Zookeeper with apt
-  apt:
-    name: zookeeperd
-    state: latest 
-    update_cache: yes
+- name: Download Zookeeper Tar
+  get_url:
+    url: "{{ ZOOKEEPER_URL }}"
+    dest: "{{ INSTALLATION_DIR }}"
 
-- name: Create a directory if it does not exist
+- name: Unpack Zookeeper tar
+  shell: tar zxvf {{ INSTALLATION_DIR }}/{{ ZOOKEEPER_TAR }} -C {{ INSTALLATION_DIR }}
+
+- name: Remove Zookeeper tar
   file:
-    path: /opt/kafka
-    state: directory
-    mode: '0755'
+    path: "{{ INSTALLATION_DIR }}/{{ ZOOKEEPER_TAR }}"
+    state: absent
 
-- name: Isntalling Kafka
-  unarchive:
-   src: "https://apache.mivzakim.net/kafka/2.2.0/kafka_2.12-2.2.0.tgz"
-   dest: /opt/kafka
-   remote_src: yes
+- name: Move zookeeper-{{ ZOOKEEPER_VERSION }} to zookeeper
+  shell: mv {{ INSTALLATION_DIR }}/zookeeper-{{ ZOOKEEPER_VERSION }} {{ INSTALLATION_DIR }}/zookeeper
+
+- name: Create data directory
+  file:
+    path: "{{ ZOOKEEPER_DATA_DIR }}"
+    state: directory
+
+
+- name: Create Zookeeper log directory
+  file:
+    path: "{{ ZOOKEEPER_LOG_DIR }}"
+    state: directory
+    
+- name: Configure zoo.cfg
+  template:
+    src: zoo_sample.cfg.j2
+    dest: "{{ INSTALLATION_DIR }}/zookeeper/conf/zoo.cfg"
+
+- name: Configure log4j.properties
+  template:
+    src: log4j.properties.j2
+    dest: "{{ INSTALLATION_DIR }}/zookeeper/conf/log4j.properties"
+
+- name: Check if zookeeper service is running
+  shell: ps aux | grep zookeeper | grep -v grep
+  ignore_errors: yes
+  register: zoo_service_status
+
+- name: Start zookeeper service
+  shell: "{{ ZOOKEEPER_START_COMMAND }}" 
+  ignore_errors: yes
+  notify:
+    - zoo_service_status report 
+
+############ Install Kafka####################
+
+- name: Download Kafka Tar file
+  get_url:
+    url: "{{ KAFKA_URL }}"
+    dest: "{{ INSTALLATION_DIR }}"
+
+- name: Unpack Kafka tar file
+  shell: tar zxvf {{ INSTALLATION_DIR }}/{{ KAFKA_TAR }} -C {{ INSTALLATION_DIR }}
+
+- name: Remove Kafka tar file
+  file:
+    path: "{{ INSTALLATION_DIR }}/{{ KAFKA_TAR }}"
+    state: absent
+
+- name: Move {{ KAFKA_SOURCE_FOLDER }} to kafka
+  shell: mv {{ INSTALLATION_DIR }}/{{ KAFKA_SOURCE_FOLDER }} {{ INSTALLATION_DIR }}/kafka
+
+- name: Create Kafka log directory
+  file:
+    path: "{{ KAFKA_LOG_DIR }}"
+    state: directory
+
+- name: Configure server.properties
+  template:
+    src: server.properties.j2
+    dest: "{{ KAFKA_HOME }}/config/server.properties"
+
+- name: Configure kafka-server-start.sh
+  template:
+    src: kafka-server-start.sh.j2
+    dest: "{{ KAFKA_HOME }}/bin/kafka-server-start.sh"
 
 # Starting Kafka
 
-- name: Run kafka
-  command: sudo /opt/kafka/bin/kafka-server-start.sh/opt/kafka/config/server.properties
+- name: Check if kafka service is running
+  shell: ps aux | grep kafka | grep -v grep
+  ignore_errors: yes
+  register: kafka_service_status
+
+ - name: Start kafka service
+   shell: "{{ KAFKA_START_COMMAND }}"
+   ignore_errors: yes
+   notify:
+     - kafka_service_status report
 
 - name: create a topic for our Nginx logs
-  command: bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic nginx
+  command: "{{ KAFKA_HOME }}/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic nginx"

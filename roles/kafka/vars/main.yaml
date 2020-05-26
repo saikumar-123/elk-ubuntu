@@ -1,0 +1,27 @@
+#########ZOOKEEPER############
+ZOOKEEPER_VERSION: 3.6.1
+ZOOKEEPER_URL: https://apache.mivzakim.net/zookeeper/zookeeper-{{ ZOOKEEPER_VERSION }}/apache-zookeeper-{{ ZOOKEEPER_VERSION }}.tar.gz
+ZOOKEEPER_TAR: apache-zookeeper-{{ ZOOKEEPER_VERSION }}.tar.gz
+INSTALLATION_DIR: /usr/local
+ZOOKEEPER_DATA_DIR: /var/lib/zookeeper
+ZOOKEEPER_LOG_DIR: /var/log/zookeeper
+ZOOKEEPER_HOME: "{{ INSTALLATION_DIR }}/zookeeper"
+
+
+# Zookeeper service commands
+ZOOKEEPER_START_COMMAND: "{{ ZOOKEEPER_HOME }}/bin/zkServer.sh start"
+ZOOKEEPER_STOP_COMMAND: "{{ ZOOKEEPER_HOME }}/bin/zkServer.sh stop"
+
+###########Kafka###########
+KAFKA_VERSION: 2.5.0
+KAFKA_SCALA_VERSION: "2.12"
+KAFKA_URL: "https://apache.mivzakim.net/kafka/{{ KAFKA_VERSION }}/kafka_{{ KAFKA_SCALA_VERSION }}-{{ KAFKA_VERSION }}.tgz"
+KAFKA_TAR: kafka_{{ KAFKA_SCALA_VERSION }}-{{ KAFKA_VERSION }}.tgz
+KAFKA_SOURCE_FOLDER: kafka_{{ KAFKA_SCALA_VERSION }}-{{ KAFKA_VERSION }}
+INSTALLATION_DIR: /usr/local
+KAFKA_HOME: "{{ INSTALLATION_DIR }}/kafka"
+KAFKA_LOG_DIR: /var/log/kafka
+
+KAFKA_STOP_COMMAND: "{{ KAFKA_HOME}}/bin/kafka-server-stop.sh; sleep 20"
+KAFKA_START_COMMAND: "{{ KAFKA_HOME }}/bin/kafka-server-start.sh -daemon {{ KAFKA_HOME }}/config/server.properties"
+

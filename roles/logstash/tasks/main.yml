@@ -5,13 +5,13 @@
 #
 - name: Download Logstash
   get_url:
-     url: "https://artifacts.elastic.co/downloads/logstash/logstash-7.5.0.deb"
-     dest: ./
+   url: "{{ DOWNLOAD_URL }}"
+   dest: "{{ INSTALLATION_DIR }}"
 
 # Installing Logstash
 #
 - name: Install Logstash
-  command: sudo dpkg -i /home/ubuntu/logstash-7.5.0.deb
+  command: sudo dpkg -i {{ INSTALLATION_DIR }}/logstash-{{ LOGSTASH_VERSION}}.deb
 
  
 # Start the service
@@ -19,11 +19,6 @@
   service:
     name: logstash
     state: started
-
-- name: Copy filebeat config file for nginx
-  template:
-    src: filebeat.yml
-    dest: /etc/filebeat/filebeat.yml
 
 # - name: Copy a sample apache.log
 #   copy:
@@ -33,7 +28,7 @@
 - name: Copy logstash config file for apache
   copy:
     src: nginx.conf
-    dest: /etc/logstash/conf.d/nginx.conf
+    dest: "{{ LOGSTASH_HOME }}/conf.d/nginx.conf"
 
 - name: Restart logstash
   service:

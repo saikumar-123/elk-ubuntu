@@ -1,0 +1,5 @@
+BEATS: filebeat
+BEATS_VERSION: 7.5.0
+DOWNLOAD_URL: https://artifacts.elastic.co/downloads/beats/{{ BEATS }}/{{ BEATS }}-{{ BEATS_VERSION }}-amd64.deb
+INSTALLATION_DIR: /usr/local
+BEATS_HOME: /etc/{{ BEATS }}

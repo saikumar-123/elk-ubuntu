@@ -7,25 +7,25 @@
 
 - name: Add Elasticsearch apt key
   get_url:
-   url: "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.5.0-amd64.deb"
-   dest: ./
+   url: "{{ DOWNLOAD_URL }}"
+   dest: "{{ INSTALLATION_DIR }}"
 
 # Add the Elasticsearch apt repo. For versions 6 of the stack - use '6.x-prerelease':
 
    #- name: installing ES
    #dpkg_selections:
-   #name: elasticsearch-7.2.0.amd64.deb
+   #name: elasticsearch-7.5.0.amd64.deb
    #selection: install
 
 # Installing Elasticsearch
 - name: install ES
-  command: sudo dpkg -i /home/ubuntu/elasticsearch-7.5.0-amd64.deb
+  command: sudo dpkg -i {{ INSTALLATION_DIR }}/elasticsearch-{{ ES_VERSION }}-amd64.deb
    
 # Update Elasticsearch config file to allow access (to secure Elasticsearch, bind to 'localhost'). 
 
 - name: Updating the config file to allow outside access
   lineinfile:
-   destfile: /etc/elasticsearch/elasticsearch.yml
+   destfile: {{ ES_HOME }}/elasticsearch.yml
    regexp: 'network.host:'
    line: 'network.host: localhost'
  
@@ -33,13 +33,13 @@
 
 - name: Updating the port in config file 
   lineinfile:
-   destfile: /etc/elasticsearch/elasticsearch.yml
+   destfile: {{ ES_HOME }}/elasticsearch.yml
    regexp: 'http.port:'
    line: 'http.port: 9200'
 
 - name: Updating the cluster in config file
   lineinfile:
-   destfile: /etc/elasticsearch/elasticsearch.yml
+   destfile: {{ ES_HOME }}/elasticsearch.yml
    regexp: 'node.name:'
    line: 'node.name: node-1'
  

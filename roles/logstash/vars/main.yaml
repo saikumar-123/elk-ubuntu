@@ -1,0 +1,4 @@
+LOGSTASH_VERSION: 7.5.0
+DOWNLOAD_URL: https://artifacts.elastic.co/downloads/logstash/logstash-{{ LOGSTASH_VERSION }}-amd64.deb
+INSTALLATION_DIR: /usr/local
+LOGSTASH_HOME: /etc/kibana

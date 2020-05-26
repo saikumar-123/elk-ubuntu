@@ -1,0 +1,4 @@
+KIBANA_VERSION: 7.5.0
+DOWNLOAD_URL: https://artifacts.elastic.co/downloads/kibana/kibana-{{ KIBANA_VERSION }}-amd64.deb
+INSTALLATION_DIR: /usr/local
+KIBANA_HOME: /etc/kibana
